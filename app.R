@@ -5,6 +5,7 @@ rm(list = ls())
   if (!require("leaflet")) install.packages("leaflet"); library(leaflet)
   if (!require("gapminder")) install.packages("gapminder"); library(gapminder)
   if (!require("dplyr")) install.packages("dplyr"); library(dplyr)
+  # TODO: implement missing packages (sp, purrr?)
 }
 
 
@@ -13,6 +14,8 @@ rm(list = ls())
 
 # define UI
 ui <- fluidPage(
+  # TODO: implement Layout
+  
   textOutput("header"),
   selectInput("data", "Data", c("Life Expectancy", "Population", "GDP per Capita")),
   selectInput("year", "Year", distinct(gapminder, gapminder$year)),
@@ -28,11 +31,11 @@ server <- function(input, output) {
   })
   
   output$map <- renderLeaflet({
-    
+     # TODO: clean Code, personalize per chosen data (eg bins)
     
     gapminder_filtered <- gapminder %>% filter(year == input$year)
     
-    WorldCountry <- geojsonio::geojson_read("C:/Users/julia/Downloads/world.geo.json-master/world.geo.json-master/countries.geo.json", what = "sp")
+    WorldCountry <- geojsonio::geojson_read("./countries.geo.json", what = "sp")
     data_Map <- WorldCountry[WorldCountry$name %in% gapminder_filtered$country, ]
     
     require(sp) # the trick is that this package must be loaded!
@@ -55,8 +58,8 @@ server <- function(input, output) {
     names(data_Map)[names(data_Map) == map_data] <- "test"
     head(data_Map)
     labels <- sprintf(
-      "<strong>%s</strong><br/>life exp: %g",
-      data_Map$name, data_Map$test) %>% lapply(htmltools::HTML)
+      "<strong>%s</strong><br/>%s: %g",
+      data_Map$name, input$data, data_Map$test) %>% lapply(htmltools::HTML)
     
     print(labels)
     
