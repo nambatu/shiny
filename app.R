@@ -31,7 +31,7 @@ server <- function(input, output) {
   })
   
   output$map <- renderLeaflet({
-     # TODO: clean Code, personalize per chosen data (eg bins)
+     # TODO: clean Code, personalize per chosen data (eg bins), add comments
     
     gapminder_filtered <- gapminder %>% filter(year == input$year)
     
@@ -60,8 +60,6 @@ server <- function(input, output) {
     labels <- sprintf(
       "<strong>%s</strong><br/>%s: %g",
       data_Map$name, input$data, data_Map$test) %>% lapply(htmltools::HTML)
-    
-    print(labels)
     
     Map <- Map %>% addPolygons(
       fillColor = ~pal(data_Map$test),
