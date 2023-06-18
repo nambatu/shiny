@@ -16,7 +16,6 @@ rm(list = ls())
 # define UI
 ui <- fluidPage(
   # TODO: implement Layout
-  #hellou
   textOutput("header"),
   selectInput("data", "Data", c("Life Expectancy", "Population", "GDP per Capita")),
   selectInput("year", "Year", distinct(gapminder, gapminder$year)),
