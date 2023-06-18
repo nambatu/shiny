@@ -127,10 +127,10 @@ ui <- fluidPage(
 )
 server <- function(input, output, session) {
   output$text <- renderText({ 
-    "Good afternoon!" 
+    "What animal is best at baseball?" 
   })
   output$code <- renderPrint({ 
-    rnorm(10)
+    "A bat!"
   })
 }
 
@@ -161,11 +161,13 @@ ui <- fluidPage(
   plotOutput("plot", width = "400px")
 )
 server <- function(input, output, session) {
-  output$plot <- renderPlot(curve(1/x,from = 0,to=10,col=2))
+  output$plot <- renderPlot(curve(1/x,from = 0,to=10))
 }
 shinyApp(ui, server)
 
-#### 1 exercise####
+
+
+#### 1 exercise ####
 
 #1. build a web application with the following inputs and outputs:
 
@@ -203,9 +205,6 @@ ui <- fluidPage(
   plotOutput("plot", width = "400px")
   # still need code for the layout!!!!!!!!!!
 )
-
-
-
 server <- function(input, output) {
   filtered_data <- reactive({
     diamonds%>%
@@ -218,5 +217,80 @@ server <- function(input, output) {
 }
 
 shinyApp(ui, server)
+
+
+#_________________________________________________________
+
+
+### Example X: Reactive Content ###
+
+ui <- fluidPage(
+  numericInput("count", label = "Number of values", value = 100),
+)
+server <- function(input, output, session) {
+  input$count = 10  # this will not work since the input argument is read-only
+}
+shinyApp(ui, server)
+
+
+#_________________________________________________________
+
+
+### Example X: Reactive Content ###
+
+ui <- fluidPage(
+  numericInput("count", label = "Number of values", value = 100),
+  verbatimTextOutput("reactive"),
+  verbatimTextOutput("direct")
+)
+server <- function(input, output, session) {
+  reactiveValue <- reactive(log2(input$count))
+  output$reactive <- renderPrint(reactiveValue())
+  output$direct <- renderPrint(input$count)
+}
+shinyApp(ui, server)
+
+
+#_________________________________________________________
+
+
+### Example X: Reactive Content ###
+
+ui <- fluidPage(
+  numericInput("count", label = "Number of values", value = 100),
+  plotOutput("hist")
+)
+server <- function(input, output, session) {
+  #inputValue <- reactive(input$count)
+  output$hist <- renderPlot(hist(rnorm(input$count)))
+}
+shinyApp(ui, server)
+
+
+
+
+
+
+#_________________________________________________________
+
+### Backup ###
+
+## Only run examples in interactive R sessions
+if (interactive()) {
+  
+  ui <- fluidPage(
+    uiOutput("moreControls")
+  )
+  
+  server <- function(input, output) {
+    output$moreControls <- renderUI({
+      tagList(
+        sliderInput("n", "N", 1, 1000, 500),
+        textInput("label", "Label")
+      )
+    })
+  }
+  shinyApp(ui, server)
+}
 
 
