@@ -305,14 +305,38 @@ server <- function(input, output) {
 
 shinyApp(ui, server)
 
+
+
+###########################################################
+####                  Server                           ####
+###########################################################
+
+
+
 #_________________________________________________________
+
+
 ### Example X: Reactive Content ###
 
 ui <- fluidPage(
   numericInput("count", label = "Number of values", value = 100),
 )
 server <- function(input, output, session) {
-  input$count = 10  # this will not work since the input argument is read-only
+  input$count <- 10  # this will not work since the input argument is read-only
+}
+shinyApp(ui, server)
+
+
+#_________________________________________________________
+
+
+### Example X: Reactive Content ###
+
+ui <- fluidPage(
+  numericInput("count", label = "Number of values", value = 100),
+)
+server <- function(input, output, session) {
+  print(input$count)  # this will not work since the input is accessed outside of a reactive context
 }
 shinyApp(ui, server)
 
@@ -328,7 +352,7 @@ ui <- fluidPage(
   verbatimTextOutput("direct")
 )
 server <- function(input, output, session) {
-  reactiveValue <- reactive(log2(input$count))
+  reactiveValue <- reactive(input$count)
   output$reactive <- renderPrint(reactiveValue())
   output$direct <- renderPrint(input$count)
 }
@@ -350,6 +374,25 @@ server <- function(input, output, session) {
 }
 shinyApp(ui, server)
 
+
+#_________________________________________________________
+
+
+### Example X: Reactive Content ###
+
+ui <- fluidPage(
+  sidebarPanel(
+    sidebarLayout(
+      numericInput("count", label = "Number of values", value = 100),
+      submitButton("I understand reactive!"),  
+    ),
+  mainPanel(plotOutput("hist"))
+  )
+)
+server <- function(input, output, session) {
+  output$hist <- renderPlot(hist(rnorm(input$count)))
+}
+shinyApp(ui, server)
 
 
 
@@ -376,5 +419,3 @@ if (interactive()) {
   }
   shinyApp(ui, server)
 }
-
-
