@@ -283,6 +283,29 @@ shinyApp(ui, server)
 
 #_________________________________________________________
 
+
+# navbarPage(): creates a horizontal menu
+# replaces fluidPage() & requires a title
+
+ui <- navbarPage(
+  "Shiny App",
+  tabPanel("Statistics", "is the discipline that concerns the collection, organization, analysis, interpretation, and presentation of data."),
+  tabPanel("Visualisations", "the physical or imagining creation of images, diagrams, or animations to communicate a message"),
+  navbarMenu(
+    "and more",
+    tabPanel("Using"),
+    tabPanel("R", "is a programming language for statistical computing and graphics.")
+    )
+)
+
+
+server <- function(input, output) {
+  
+}
+
+shinyApp(ui, server)
+
+#_________________________________________________________
 ### Example X: Reactive Content ###
 
 ui <- fluidPage(
