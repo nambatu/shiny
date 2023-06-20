@@ -127,10 +127,10 @@ ui <- fluidPage(
 )
 server <- function(input, output, session) {
   output$text <- renderText({ 
-    "What animal is best at baseball?" 
+    "Good afternoon!" 
   })
   output$code <- renderPrint({ 
-    "A bat!"
+    rnorm(10)
   })
 }
 
@@ -161,136 +161,57 @@ ui <- fluidPage(
   plotOutput("plot", width = "400px")
 )
 server <- function(input, output, session) {
-  output$plot <- renderPlot(curve(1/x,from = 0,to=10))
+  output$plot <- renderPlot(curve(1/x,from = 0,to=10,col=2))
 }
 shinyApp(ui, server)
 
 
+#### exercise 1 ####
 
-#### 1 exercise ####
+#### exercise 1 ####
 
 #1. build a web application with the following inputs and outputs:
 
-# A slider to select the range of carat (0.2-5.2, initial range is 0.2-2), step is 0.2
+# A slider with inputId "carat_range" to select the range of carat (0.2-5.2, initial range is 0.2-2), step is 0.2
 
-# A select box to select the cut type, the vector is already provided for you
+# A select box with inputId "cut_type" to select the cut type, the vector is already provided for you
 
-# A select box to select the x variable for the plot, the y axis is price , the vector is already provided for you
+# A action button with inputId "display", label "Display!"
 
-# A radioButton to select the plot type,the vector is already provided for you
-
-# A text input to enter the titel of the plot
-
-# A action button "display"
+# A dynamic data table output with outputId "diamond_filtered"
 
 library(shiny)
 library(dplyr)
 library(ggplot2)
 cut<-c("Fair", "Good", "Very Good", "Premium", "Ideal")
-axis_X<-c("carat","depth","table")
-plot_type<-c("scatter","bar","curve")
 ui <- fluidPage(
+  
   titlePanel("manipulate the dataset diamond"),
+  # solution
+  
   sliderInput("carat_range", "Please select the carat range", min=0.2, max=5.2, value =c(0.2,2),step = 0.2),
   selectInput("cut_type", "Please select the cut type",cut,selected="Fair"),
-  
-  
-  selectInput("x", "Please select a variable for axis X",axis_X),
-  radioButtons("p_type", "Please select the plot type",plot_type),
-  textInput("plot_titel", "Please enter the titel for the plot"),
   
   actionButton(inputId = "display", label = "Display!", class = "btn-success"),
   
   dataTableOutput("diamond_filtered"),
-  plotOutput("plot", width = "400px")
-  # still need code for the layout!!!!!!!!!!
+  
+  # solution
+  
 )
+
+
+
 server <- function(input, output) {
-  filtered_data <- reactive({
-    diamonds%>%
-      filter(carat>=input$carat_range[1] &  carat<= input$carat_range[2]&cut==input$cut_type)
-  })
+  #filtered_data <- reactive({
+  # diamonds%>%
+  #filter(carat>=input$carat_range[1] &  carat<= input$carat_range[2]&cut==input$cut_type)
+  #  })
   
-  data<-eventReactive(input$display,{filtered_data()})
-  output$diamond_filtered <- renderDataTable(data(),options = list(pageLength = 5))
-  # still need code for the plot!!!!!!!!!!!!!!!!!
+  #data<-eventReactive(input$display,{filtered_data()})
+  #output$diamond_filtered <- renderDataTable(data(),options = list(pageLength = 5))
 }
 
 shinyApp(ui, server)
-
-
-#_________________________________________________________
-
-
-### Example X: Reactive Content ###
-
-ui <- fluidPage(
-  numericInput("count", label = "Number of values", value = 100),
-)
-server <- function(input, output, session) {
-  input$count = 10  # this will not work since the input argument is read-only
-}
-shinyApp(ui, server)
-
-
-#_________________________________________________________
-
-
-### Example X: Reactive Content ###
-
-ui <- fluidPage(
-  numericInput("count", label = "Number of values", value = 100),
-  verbatimTextOutput("reactive"),
-  verbatimTextOutput("direct")
-)
-server <- function(input, output, session) {
-  reactiveValue <- reactive(log2(input$count))
-  output$reactive <- renderPrint(reactiveValue())
-  output$direct <- renderPrint(input$count)
-}
-shinyApp(ui, server)
-
-
-#_________________________________________________________
-
-
-### Example X: Reactive Content ###
-
-ui <- fluidPage(
-  numericInput("count", label = "Number of values", value = 100),
-  plotOutput("hist")
-)
-server <- function(input, output, session) {
-  #inputValue <- reactive(input$count)
-  output$hist <- renderPlot(hist(rnorm(input$count)))
-}
-shinyApp(ui, server)
-
-
-
-
-
-
-#_________________________________________________________
-
-### Backup ###
-
-## Only run examples in interactive R sessions
-if (interactive()) {
-  
-  ui <- fluidPage(
-    uiOutput("moreControls")
-  )
-  
-  server <- function(input, output) {
-    output$moreControls <- renderUI({
-      tagList(
-        sliderInput("n", "N", 1, 1000, 500),
-        textInput("label", "Label")
-      )
-    })
-  }
-  shinyApp(ui, server)
-}
 
 
