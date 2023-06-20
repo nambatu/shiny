@@ -1,5 +1,9 @@
 ### R Shiny Tutorial ###
 
+# preliminaries 
+# clear the environment
+rm(list = ls())
+# install or load all required packages
 {
   if (!require("shiny")) install.packages("shiny"); library(shiny)
   
@@ -8,6 +12,12 @@
   if (!require("dplyr")) install.packages("dplyr"); library(dplyr)
 }
 
+# First shiny example to see the structure of shiny
+
+#viewing dataset
+View(faithful)
+
+runExample("01_hello")
 
 ### How to run the apps:
 
@@ -168,8 +178,6 @@ shinyApp(ui, server)
 
 #### exercise 1 ####
 
-#### exercise 1 ####
-
 #1. build a web application with the following inputs and outputs:
 
 # A slider with inputId "carat_range" to select the range of carat (0.2-5.2, initial range is 0.2-2), step is 0.2
@@ -213,5 +221,137 @@ server <- function(input, output) {
 }
 
 shinyApp(ui, server)
+
+###########################################################
+####                  Layout                           ####
+###########################################################
+
+#_________________________________________________________
+
+# fluidPage() function
+# Layout the UI by placing elements in the fluidPage function
+
+ui <- fluidPage(
+  titlePanel("Shiny"),
+  sidebarLayout(
+    #position = "right",            #appeares by default on the left side
+    sidebarPanel("really cool"),
+    mainPanel("is cool")
+  )
+)
+
+server <- function(input, output) {
+
+}
+
+shinyApp(ui, server)
+
+#_________________________________________________________
+
+# Grid Layout: fluidRow() and column() function are used to build a layout from a grid system
+# can be used anywhere within fluidPage & nested in each other
+# the number of units should always add up to 12
+# wellPanel creates a box with grey background
+
+ui <- fluidPage(
+  
+  fluidRow(
+    column(2, wellPanel("Column width 2")),
+    column(10, wellPanel("Column width 10"))),
+  fluidRow(
+    column(4, wellPanel("Column width 4")),
+    column(8, wellPanel("Column width 8"),
+           fluidRow(
+             column(6, wellPanel("Column width 6")),
+             column(6, wellPanel("Column width 6"))
+           )
+    )
+  )
+)
+
+
+server <- function(input, output) {
+  
+}
+
+shinyApp(ui, server)
+
+#_________________________________________________________
+
+# TabsetPanel(): to subdivide the UI into discrete sections
+# Tabs are located on top by default
+
+#_________________________________________________________
+
+### Example X: Reactive Content ###
+
+ui <- fluidPage(
+  numericInput("count", label = "Number of values", value = 100),
+)
+server <- function(input, output, session) {
+  input$count = 10  # this will not work since the input argument is read-only
+}
+shinyApp(ui, server)
+
+
+#_________________________________________________________
+
+
+### Example X: Reactive Content ###
+
+ui <- fluidPage(
+  numericInput("count", label = "Number of values", value = 100),
+  verbatimTextOutput("reactive"),
+  verbatimTextOutput("direct")
+)
+server <- function(input, output, session) {
+  reactiveValue <- reactive(log2(input$count))
+  output$reactive <- renderPrint(reactiveValue())
+  output$direct <- renderPrint(input$count)
+}
+shinyApp(ui, server)
+
+
+#_________________________________________________________
+
+
+### Example X: Reactive Content ###
+
+ui <- fluidPage(
+  numericInput("count", label = "Number of values", value = 100),
+  plotOutput("hist")
+)
+server <- function(input, output, session) {
+  #inputValue <- reactive(input$count)
+  output$hist <- renderPlot(hist(rnorm(input$count)))
+}
+shinyApp(ui, server)
+
+
+
+
+
+
+#_________________________________________________________
+
+### Backup ###
+
+## Only run examples in interactive R sessions
+if (interactive()) {
+  
+  ui <- fluidPage(
+    uiOutput("moreControls")
+  )
+  
+  server <- function(input, output) {
+    output$moreControls <- renderUI({
+      tagList(
+        sliderInput("n", "N", 1, 1000, 500),
+        textInput("label", "Label")
+      )
+    })
+  }
+  shinyApp(ui, server)
+}
 
 
