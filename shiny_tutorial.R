@@ -317,7 +317,6 @@ server <- function(input, output) {
 
 shinyApp(ui, server)
 
-<<<<<<< HEAD
 #_______________________________________________________________________________
 
 # navbarlistPanel()-------------------------------------------------------------
@@ -373,22 +372,12 @@ server <- function(input, output) {
 }
 
 shinyApp(ui, server)
-=======
-
->>>>>>> 168cfb475e087ac81320b8d6f2a790d3c1c0a21f
 
 ###########################################################
 ####                  Server                           ####
 ###########################################################
 
-<<<<<<< HEAD
 #_______________________________________________________________________________
-=======
-
-
-#_________________________________________________________
-
->>>>>>> 168cfb475e087ac81320b8d6f2a790d3c1c0a21f
 
 ### Example X: Reactive Content ###
 
@@ -398,23 +387,6 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   input$count <- 10  # this will not work since the input argument is read-only
-<<<<<<< HEAD
-=======
-}
-shinyApp(ui, server)
-
-
-#_________________________________________________________
-
-
-### Example X: Reactive Content ###
-
-ui <- fluidPage(
-  numericInput("count", label = "Number of values", value = 100),
-)
-server <- function(input, output, session) {
-  print(input$count)  # this will not work since the input is accessed outside of a reactive context
->>>>>>> 168cfb475e087ac81320b8d6f2a790d3c1c0a21f
 }
 
 shinyApp(ui, server)
@@ -470,29 +442,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-<<<<<<< HEAD
 ### Example X: Reactive Content ###
-=======
-#_________________________________________________________
-
-
-### Example X: Reactive Content ###
-
-ui <- fluidPage(
-  sidebarPanel(
-    sidebarLayout(
-      numericInput("count", label = "Number of values", value = 100),
-      submitButton("I understand reactive!"),  
-    ),
-  mainPanel(plotOutput("hist"))
-  )
-)
-server <- function(input, output, session) {
-  output$hist <- renderPlot(hist(rnorm(input$count)))
-}
-shinyApp(ui, server)
-
->>>>>>> 168cfb475e087ac81320b8d6f2a790d3c1c0a21f
 
 ui <- fluidPage(
   sidebarPanel(
