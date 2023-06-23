@@ -292,34 +292,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Example 12: navbarPage()----------------------------------------------------
-# creates a horizontal menu
-# replaces fluidPage() & requires a title
-
-ui <- navbarPage(
-  "Shiny App",
-  tabPanel("Statistics", "is the discipline that concerns the collection, 
-           organization, analysis, interpretation, and presentation of data."),
-  tabPanel("Visualisations", "the physical or imagining creation of images, 
-           diagrams, or animations to communicate a message"),
-  navbarMenu(
-    "and more",
-    tabPanel("Using"),
-    tabPanel("R", "is a programming language for statistical computing & 
-             graphics.")
-    )
-)
-
-
-server <- function(input, output) {
-  
-}
-
-shinyApp(ui, server)
-
-#_______________________________________________________________________________
-
-### Example 13: navbarlistPanel()-----------------------------------------------
+### Example 12: navbarlistPanel()-----------------------------------------------
 # shows tab titles vertically with a sidebar
 # add headings with plain strings
 
@@ -336,6 +309,33 @@ ui <- fluidPage(
              & graphics."),
     tabPanel("Description", "is pretty cool.")
   )
+)
+
+
+server <- function(input, output) {
+  
+}
+
+shinyApp(ui, server)
+
+#_______________________________________________________________________________
+
+### Example 13: navbarPage()----------------------------------------------------
+# creates a horizontal menu
+# replaces fluidPage() & requires a title
+
+ui <- navbarPage(
+  "Shiny App",
+  tabPanel("Statistics", "is the discipline that concerns the collection, 
+           organization, analysis, interpretation, and presentation of data."),
+  tabPanel("Visualisations", "the physical or imagining creation of images, 
+           diagrams, or animations to communicate a message"),
+  navbarMenu(
+    "and more",
+    tabPanel("Using"),
+    tabPanel("R", "is a programming language for statistical computing & 
+             graphics.")
+    )
 )
 
 
