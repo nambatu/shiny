@@ -217,7 +217,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-# fluidPage() function----------------------------------------------------------
+### Example 9: fluidPage() function---------------------------------------------
 # Layout the UI by placing elements in the fluidPage function
 
 ui <- fluidPage(
@@ -237,8 +237,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-# Grid Layout-------------------------------------------------------------------
-
+### Example 10: Grid Layout-----------------------------------------------------
 # fluidRow() and column() function are used to build a layout from a grid system
 # can be used anywhere within fluidPage & nested in each other
 # the number of units should always add up to 12
@@ -268,7 +267,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-# TabsetPanel()-----------------------------------------------------------------
+### Example 11: TabsetPanel()---------------------------------------------------
 # to subdivide the UI into discrete sections
 # Tabs are located on top by default
 
@@ -293,7 +292,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-# navbarPage()------------------------------------------------------------------
+### Example 12: navbarPage()----------------------------------------------------
 # creates a horizontal menu
 # replaces fluidPage() & requires a title
 
@@ -306,7 +305,8 @@ ui <- navbarPage(
   navbarMenu(
     "and more",
     tabPanel("Using"),
-    tabPanel("R", "is a programming language for statistical computing & graphics.")
+    tabPanel("R", "is a programming language for statistical computing & 
+             graphics.")
     )
 )
 
@@ -319,7 +319,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-# navbarlistPanel()-------------------------------------------------------------
+### Example 13: navbarlistPanel()-----------------------------------------------
 # shows tab titles vertically with a sidebar
 # add headings with plain strings
 
@@ -379,7 +379,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Example X: Reactive Content ###
+### Example 14: Reactive Content ###
 
 ui <- fluidPage(
   numericInput("count", label = "Number of values", value = 100),
@@ -394,7 +394,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Example X: Reactive Content ###
+### Example 15: Reactive Content ###
 
 ui <- fluidPage(
   numericInput("count", label = "Number of values", value = 100),
@@ -408,7 +408,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Example X: Reactive Content ###
+### Example 16: Reactive Content ###
 
 ui <- fluidPage(
   numericInput("count", label = "Number of values", value = 100),
@@ -426,7 +426,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Example X: Reactive Content ###
+### Example 17: Reactive Content ###
 
 ui <- fluidPage(
   numericInput("count", label = "Number of values", value = 100),
@@ -442,7 +442,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Example X: Reactive Content ###
+### Example 18: Reactive Content ###
 
 ui <- fluidPage(
   sidebarPanel(
