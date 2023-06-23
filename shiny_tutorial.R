@@ -214,6 +214,26 @@ shinyApp(ui, server)
 ###########################################################
 ####                  Layout                           ####
 ###########################################################
+library(bslib)
+ui <- fluidPage(
+  theme = bs_theme(
+    bootswatch = "darkly"
+  ),
+  h1("Header 1"),
+  hr(),
+  br(),
+  p(strong("bold")),
+  p(em("italic")),
+  p(code("code")),
+  a(href="https://rstudio.github.io/shinydashboard/structure.html","link")
+  )
+
+
+server <- function(input, output) {
+  
+}
+
+shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
@@ -347,6 +367,77 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
+### Example 14: Themes----------------------------------------------------------
+# load the bslib package and change the overall look of your app
+
+library(bslib) 
+
+ui <- navbarPage(
+  theme = bs_theme(bootswatch = "darkly"), 
+    "Shiny App",
+    tabPanel("Statistics", "is the discipline that concerns the collection, 
+           organization, analysis, interpretation, and presentation of data."),
+    tabPanel("Visualisations", "the physical or imagining creation of images, 
+           diagrams, or animations to communicate a message"),
+    navbarMenu(
+      "and more",
+      tabPanel("Using"),
+      tabPanel("R", "is a programming language for statistical computing & 
+             graphics.")
+    )
+  )
+
+server <- function(input, output) {
+  
+}
+
+shinyApp(ui, server)
+
+#_______________________________________________________________________________
+
+### Example 15: Themes----------------------------------------------------------
+# create your own own theme & view it
+# install this packages if htmlwidgets are not available for your R version
+install.packages("htmlwidgets", type = "binary")
+install.packages("DT", type = "binary")
+
+#load the bslib package
+library(bslib)
+#customize your theme
+custom_theme <- bs_theme(
+  bg = "lightblue", 
+  fg = "yellow",
+  base_font = "Maven Pro"
+)
+
+bs_theme_preview(theme = custom_theme, with_themer = FALSE)
+
+# use your theme on an example
+ui <- fluidPage(
+  theme = custom_theme,
+  titlePanel("Tabsets"),
+  sidebarLayout(
+    sidebarPanel("panels"),
+    mainPanel(
+      tabsetPanel(
+        tabPanel("panel 1", "one"),
+        tabPanel("panel 2", "two"),
+        tabPanel("panel 3", "three")
+      )
+    )
+  )
+)
+server <- function(input, output) {
+}
+
+shinyApp(ui, server)
+
+#_______________________________________________________________________________
+
+### Example 16: HTML------------------------------------------------------------
+
+#_______________________________________________________________________________
+
 #### Exercise 2 ####------------------------------------------------------------
 # 2. Make a fun layout for the diamond dataset from exercise 1:
 
@@ -379,7 +470,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Example 14: Reactive Content ###
+### Example 17: Reactive Content ###
 
 ui <- fluidPage(
   numericInput("count", label = "Number of values", value = 100),
@@ -394,7 +485,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Example 15: Reactive Content ###
+### Example 18: Reactive Content ###
 
 ui <- fluidPage(
   numericInput("count", label = "Number of values", value = 100),
@@ -408,7 +499,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Example 16: Reactive Content ###
+### Example 19: Reactive Content ###
 
 ui <- fluidPage(
   numericInput("count", label = "Number of values", value = 100),
@@ -426,7 +517,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Example 17: Reactive Content ###
+### Example 20: Reactive Content ###
 
 ui <- fluidPage(
   numericInput("count", label = "Number of values", value = 100),
@@ -442,7 +533,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Example 18: Reactive Content ###
+### Example 21: Reactive Content ###
 
 ui <- fluidPage(
   sidebarPanel(
