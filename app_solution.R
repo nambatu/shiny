@@ -60,7 +60,7 @@ server <- function(input, output) {
       }
     else if (input$data == "GDP per Capita") {
       map_data = "gdpPercap"
-      bins <- c(200, 1000, 5000, 10000, 20000, 30000, 40000, 50000)  # Can you find some errors in the data? (Hint: Look at early years in Middle East)
+      bins <- c(200, 1000, 5000, 10000, 20000, 30000, 40000, 50000)  # Can you find some errors in the data? (Hint: Look at early years near Persian Gulf)
       pal <- colorBin("Greens", domain = data_Map$temp, bins = bins)
       }
     names(data_Map)[names(data_Map) == map_data] <- "temp"  # rename current column so that we can access it easier
