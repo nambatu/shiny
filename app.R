@@ -15,12 +15,21 @@ rm(list = ls())
 
 # define UI
 ui <- fluidPage(
+  # TODO: implement Layout
+  
   theme = bslib::bs_theme(version = 4, bootswatch = "minty"),
   
-  ## TODO: implement Layout
-  select______("data", "Data", c("Life Expectancy", "Population", "GDP per Capita")),
-  ## TODO: Define Input that lets the User choose a year from the gapminder dataset, uniqueId = "year"
-  _______Output("map")
+  sidebarLayout(
+    sidebarPanel(
+      h1("Explore a dataset"),
+      selectInput("data", "Data", c("Life Expectancy", "Population", "GDP per Capita")),
+      selectInput("year", "Year", distinct(gapminder, gapminder$year))
+    ),
+    mainPanel(
+      h1("World Map"),
+      leafletOutput("map")
+    )
+  ),
 )
 
 
@@ -29,11 +38,11 @@ ui <- fluidPage(
 server <- function(input, output) {
   
   output$map <- renderLeaflet({
-    ## filter gapmider data by input$year (the %>% operator works as reactive context)
-    gapminder_filtered <- 
-      
-      # read geojson file, filter and merge with gapminder data
-      WorldCountry <- geojsonio::geojson_read("./countries.geo.json", what = "sp")
+    # filter by year
+    gapminder_filtered <- gapminder %>% filter(year == input$year)
+    
+    # read geojson file, filter and merge with gapminder data
+    WorldCountry <- geojsonio::geojson_read("./countries.geo.json", what = "sp")
     data_Map <- WorldCountry[WorldCountry$name %in% gapminder_filtered$country, ]
     require(sp) # the trick is that this package must be loaded!
     data_Map <- merge(data_Map, gapminder_filtered, by.x="name", by.y="country")
@@ -86,3 +95,4 @@ server <- function(input, output) {
 }
 
 shinyApp(ui, server)
+
