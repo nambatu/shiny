@@ -214,31 +214,12 @@ shinyApp(ui, server)
 ###########################################################
 ####                  Layout                           ####
 ###########################################################
-library(bslib)
-ui <- fluidPage(
-  theme = bs_theme(
-    bootswatch = "darkly"
-  ),
-  h1("Header 1"),
-  hr(),
-  br(),
-  p(strong("bold")),
-  p(em("italic")),
-  p(code("code")),
-  a(href="https://rstudio.github.io/shinydashboard/structure.html","link")
-  )
-
-
-server <- function(input, output) {
-  
-}
-
-shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Example 9: fluidPage() function---------------------------------------------
+### Example 9: titlePanel() & SidebarLayout()-----------------------------------
 # Layout the UI by placing elements in the fluidPage function
+# Create a basic Shiny app with sidebar
 
 ui <- fluidPage(
   titlePanel("Shiny"),
@@ -312,7 +293,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Example 12: navbarlistPanel()-----------------------------------------------
+### Example 12: navlistPanel()-----------------------------------------------
 # shows tab titles vertically with a sidebar
 # add headings with plain strings
 
@@ -435,7 +416,21 @@ shinyApp(ui, server)
 #_______________________________________________________________________________
 
 ### Example 16: HTML------------------------------------------------------------
+# Customize your shiny app with HTML helper
 
+ui <- fluidPage(
+  h1("Header 1"),    # Heading
+  br(),              # single line break
+  p(strong("bold")), # p() Paragraph, strong() important text, displayed in bold
+  p("hi this is",em("italic")),   # emphasized text, typically displayed in italic
+  p("here is a", code("code")),   # text defined as computer code
+  a(href="https://nambatu.shinyapps.io/shiny1/","cool shiny app") #create a link
+
+)
+server <- function(input, output) {
+}
+
+shinyApp(ui, server)
 #_______________________________________________________________________________
 
 #### Exercise 2 ####------------------------------------------------------------
@@ -447,6 +442,9 @@ shinyApp(ui, server)
 # create a navlistPanel with 2 tabPanels
 # every tabPanel should have a heading and one should contain the action button
 # from exercise 1
+
+# if you have time left: change the theme of the shiny app and insert some HTML 
+# helpers like h1() and br() and maybe add a link
 
 library(shiny)
 library(dplyr)
