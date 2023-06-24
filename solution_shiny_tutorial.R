@@ -60,10 +60,11 @@ shinyApp(ui, server)
 ### Example 2: Input free text--------------------------------------------------
 
 ui <- fluidPage(
-  textInput("hometown", "Where are you from?"),
+  textInput("hometown", "Where are you from?",width = "300px"),
   passwordInput("password", "What's your password?"),
-  textAreaInput("career", "Tell me about your career", rows = 3)
+  textAreaInput("career", "Tell me about your career",rows = 3)
 )
+
 
 server <- function(input, output) {
   
@@ -76,12 +77,11 @@ shinyApp(ui, server)
 ### Example 3: Input numeric values---------------------------------------------
 
 ui <- fluidPage(
-  numericInput("num1", "Number one", value = 5, min = 0, max = 100),
+  numericInput("num1", "Number one", value = 5, min = 0, max = 100,step=0.1),
   sliderInput("num2", "Number two", value = 10, min = 0, max = 100,step = 10,
               animate = animationOptions(interval = 1000, loop = TRUE)),
-  sliderInput("rng", "Range", value = c(10, 50), min = 0, max = 100)
+  sliderInput("rng", "Range", value = c(10,50), min = 0, max = 100)
 )
-
 
 server <- function(input, output) {
 }
@@ -95,7 +95,8 @@ shinyApp(ui, server)
 animals <- c("dog", "cat", "mouse", "bird", "other", "I hate animals")
 
 ui <- fluidPage(
-  selectInput("animal", "What's your favourite animal?", animals,selected = "cat"),
+  selectInput("animal", "What's your favourite animal?",choices = animals,selected = "cat",
+              multiple =TRUE ),
   radioButtons("rb", "What's your mood now?",
                choiceNames = list(
                  icon("angry"),
@@ -103,27 +104,35 @@ ui <- fluidPage(
                  icon("sad-tear")
                ),
                choiceValues = list("angry", "happy", "sad")
-  )#choiceNames allows any type of UI object to be passed through (tag objects, icons, HTML code, ...), instead of just simple text
+  ),#choiceNames allows any type of UI object to be passed through (tag objects,
+  #icons, HTML code, ...), instead of just simple text
+  textOutput("txt")
 )
 
-
 server <- function(input, output) {
+  output$txt <- renderText({
+    paste("You are", input$rb,"!")
+  })
 }
 
 shinyApp(ui, server)
+
 
 #_______________________________________________________________________________
 
 ### Example 5: Input buttons----------------------------------------------------
 
+
 ui <- fluidPage(
   actionButton(inputId = "goButton", label = "Go!", class = "btn-success"),
+  actionLink("infoLink", "Information Link", class = "btn-info"),
   br(),
   br(),
   submitButton(text = "refresh", icon =icon("fas fa-sync")),
   br(),
   actionButton(inputId = "dangerButton", label = "be carefull",class = "btn-danger", icon = icon("fire"))
-)
+)# change the appearance using "btn-primary", "btn-success", "btn-info", "btn-warning", or "btn-danger"
+# change the size with "btn-lg", "btn-sm", "btn-xs","btn-block"
 
 server <- function(input, output) {
 }
@@ -177,6 +186,48 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
+### additional Example: Updating inputs-----------------------------------------
+
+ui <- fluidPage(
+  numericInput("min", "Minimum", 0),
+  numericInput("max", "Maximum", 3),
+  sliderInput("n", "n", min = 0, max = 3, value = 1)
+)
+
+server <- function(input, output, session) {
+  observeEvent(input$min, {
+    updateSliderInput(inputId = "n", min = input$min)
+  })  
+  observeEvent(input$max, {
+    updateSliderInput(inputId = "n", max = input$max)
+  })
+}
+
+shinyApp(ui, server)
+
+#_______________________________________________________________________________
+
+### additional Example: Creating UI with code-----------------------------------
+
+ui <- fluidPage(
+  textInput("label", "label"),
+  selectInput("type", "type", c("slider", "numeric")),
+  uiOutput("numeric")
+)
+
+server <- function(input, output, session) {
+  output$numeric <- renderUI({
+    if (input$type == "slider") {
+      sliderInput("dynamic", input$label, value = 0, min = 0, max = 10)
+    } else {
+      numericInput("dynamic", input$label, value = 0, min = 0, max = 10) 
+    }
+  })
+}
+shinyApp(ui, server)
+
+#_______________________________________________________________________________
+
 #### Exercise 1 ####------------------------------------------------------------
 
 #1. build a web application with the following inputs and outputs:
@@ -187,7 +238,7 @@ shinyApp(ui, server)
 # A select box with inputId "cut_type" to select the cut type, the vector is
 # already provided for you
 
-# A action button with inputId "display", label "Display!"
+# An action button with inputId "display", label "Display!"
 
 # A dynamic data table output with outputId "diamond_filtered"
 
@@ -434,6 +485,7 @@ shinyApp(ui, server)
 
 ui <- fluidPage(
   h1("Header 1"),    # Heading
+  h2("Header 2"),    # h3, h4... also available
   br(),              # single line break
   p(strong("bold")), # p() Paragraph, strong() important text, displayed in bold
   p("hi this is",em("italic")),   # emphasized text, typically displayed in italic
