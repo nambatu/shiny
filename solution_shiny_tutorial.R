@@ -463,10 +463,12 @@ shinyApp(ui, server)
 library(shiny)
 library(dplyr)
 library(ggplot2)
+library(bslib)
 
 cut<-c("Fair", "Good", "Very Good", "Premium", "Ideal")
 
 ui <- fluidPage(
+  theme = bs_theme(bootswatch = "sandstone"),
   h1("Fun Layout of the diamond dataset"),
   br(),
   fluidRow(
