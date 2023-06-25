@@ -9,6 +9,7 @@ rm(list = ls())
 
 # install or load shiny
 if (!require("shiny")) install.packages("shiny"); library(shiny)
+if (!require("dplyr")) install.packages("dplyr"); library(dplyr)
 
 
 ###########################################################
@@ -487,10 +488,6 @@ shinyApp(ui, server)
 # if you have time left: change the theme of the shiny app and insert some HTML 
 # helpers like h1() and br() and maybe add a link
 
-library(shiny)
-library(dplyr)
-library(ggplot2)
-
 cut<-c("Fair", "Good", "Very Good", "Premium", "Ideal")
 
 ui <- fluidPage(
@@ -568,9 +565,9 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   
-  count_log2 <- reactive(log2(input$count))
-  output$reactive <- renderPrint(count_log2())
-  output$reactive2 <- renderPrint(count_log2)  # this is what happens if you forget ()
+  reactive_count <- reactive(input$count)
+  output$reactive <- renderPrint(reactive_count())
+  output$reactive2 <- renderPrint(reactive_count)  # reactive_count is not a fixed variable but a function
   
   output$direct <- renderPrint(input$count)
 }
@@ -590,7 +587,7 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   output$sin <- renderPlot({
-    t <- seq(0,10, 0.01)
+    t <- seq(0, 10, 0.01)
     plot(t, input$amp*sin(t*input$freq), type = "l")
   })
 }
