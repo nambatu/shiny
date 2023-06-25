@@ -509,7 +509,26 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Example 17: Reactive Content ###
+### Example 17: Render function ###
+
+ui <- fluidPage(
+  numericInput("freq", label = "Frequency", value = 1),
+  plotOutput("sin")
+)
+
+server <- function(input, output) {
+  output$sin <- renderPlot({
+    # You can code your own output in the render* function
+    time <- seq(0,10, 0.01)
+    plot(time, sin(time*input$freq), type = "l", ylab = "Sin")
+  })
+}
+
+shinyApp(ui, server)
+
+#_______________________________________________________________________________
+
+### Example 18: Input values ###
 
 ui <- fluidPage(
   numericInput("count", label = "Number of values", value = 100),
@@ -524,7 +543,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Example 18: Reactive Content ###
+### Example 19: Input values ###
 
 ui <- fluidPage(
   numericInput("count", label = "Number of values", value = 100),
@@ -538,7 +557,7 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Example 19: Reactive Content ###
+### Example 20: Reactive functions ###
 
 ui <- fluidPage(
   numericInput("count", label = "Number of values", value = 100),
@@ -548,9 +567,10 @@ ui <- fluidPage(
 )
 
 server <- function(input, output) {
+  
   count_log2 <- reactive(log2(input$count))
   output$reactive <- renderPrint(count_log2())
-  output$reactive2 <- renderPrint(count_log2)
+  output$reactive2 <- renderPrint(count_log2)  # this is what happens if you forget ()
   
   output$direct <- renderPrint(input$count)
 }
@@ -559,61 +579,47 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Example 20: Reactive Content ###
+### Example 21: Reactive Buttons ###
 
 ui <- fluidPage(
-  numericInput("count", label = "Number of values", value = 100),
-  plotOutput("hist")
+  numericInput("freq", label = "Frequency", value = 1),
+  numericInput("amp", "Amplitude:", 1),
+  submitButton("Update all input"),
+  plotOutput("sin"),
 )
 
 server <- function(input, output) {
-  #inputValue <- reactive(input$count)
-  output$hist <- renderPlot(hist(rnorm(input$count)))
+  output$sin <- renderPlot({
+    t <- seq(0,10, 0.01)
+    plot(t, input$amp*sin(t*input$freq), type = "l")
+  })
 }
 
 shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Example 21: Reactive Content ###
+### Example 22: Reactive Buttons ###
 
 ui <- fluidPage(
-  textInput("user_text", label = "Enter some text:", placeholder = "Please enter some text."),
-  textOutput("text"),
-  numericInput("count", label = "Number of values:", value = 100),
-  submitButton("Update all input"),  
-  plotOutput("hist")
+  numericInput("freq", label = "Frequency", value = 1),
+  actionButton("submit", label = "Update frequency"),
+  numericInput("amp", "Amplitude:", 1),
+  plotOutput("sin"),
 )
 
 server <- function(input, output) {
-  output$text <- renderText(input$user_text)
-  output$hist <- renderPlot(hist(rnorm(input$count)))
-}
-
-shinyApp(ui, server)
-
-#_______________________________________________________________________________
-
-### Example 21: Reactive Content ###
-
-ui <- fluidPage(
-  textInput("user_text", label = "Enter some text:", placeholder = "Please enter some text."),
-  textOutput("text"),
-  numericInput("count", label = "Number of values:", value = 100),
-  actionButton("submit", label = "Update only text input"),
-  plotOutput("hist")
-)
-
-server <- function(input, output) {
-  # reactive expression
-  text_reactive <- eventReactive( input$submit, {
-    input$user_text
+  
+  output$sin <- renderPlot({
+    t <- seq(0, 10, 0.01)
+    plot(t, input$amp*sin(t*reactive_freq()), type = "l")
   })
   
-  # text output
-  output$text <- renderText(text_reactive())
-  output$hist <- renderPlot(hist(rnorm(input$count)))
+  reactive_freq <- eventReactive(input$submit, {
+    input$freq
+  })
 }
+
 shinyApp(ui, server)
 
 
