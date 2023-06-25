@@ -8,19 +8,24 @@ rm(list = ls())
   if (!require("dplyr")) install.packages("dplyr"); library(dplyr)
   if (!require("geojsonio")) install.packages("geojsonio"); library(geojsonio)
   if (!require("sp")) install.packages("sp"); library(sp)
+  if (!require("bslib")) install.packages("bslib"); library(bslib)
 }
 
 
 ### Shiny-App ###
 
+## TODO: Fill in all ______-gaps and implement missing code marked by ## TODO: ...
+
 
 # define UI
 ui <- fluidPage(
-  theme = bslib::bs_theme(version = 4, bootswatch = "minty"),
+  ## TODO: Choose a theme or create your own
+  theme = bslib::
   
-  ## TODO: implement Layout
+  ## TODO: implement a clear Layout
+    
   select______("data", "Data", c("Life Expectancy", "Population", "GDP per Capita")),
-  ## TODO: Define Input that lets the User choose a year from the gapminder dataset, uniqueId = "year"
+  ## TODO: Define Input that lets the User choose a year from the gapminder dataset with uniqueId = "year"
   _______Output("map")
 )
 
@@ -29,12 +34,13 @@ ui <- fluidPage(
 # define Server
 server <- function(input, output) {
   
-  output$map <- renderLeaflet({
-    ## filter gapmider data by input$year (the %>% operator works as reactive context)
+  output$___ <- render______({
+    ## TODO: filter gapmider data by input$year
     gapminder_filtered <- 
       
-      # read geojson file, filter and merge with gapminder data
-      WorldCountry <- geojsonio::geojson_read("./countries.geo.json", what = "sp")
+    # read geojson file, filter and merge with gapminder data
+    ## TODO: fill in the right path to the countries.geo.json file
+    WorldCountry <- geojsonio::geojson_read("./countries.geo.json", what = "sp")
     data_Map <- WorldCountry[WorldCountry$name %in% gapminder_filtered$country, ]
     require(sp) # the trick is that this package must be loaded!
     data_Map <- merge(data_Map, gapminder_filtered, by.x="name", by.y="country")
@@ -63,7 +69,7 @@ server <- function(input, output) {
       "<strong>%s</strong><br/>%s: %g",
       data_Map$name, input$data, data_Map$temp) %>% lapply(htmltools::HTML)
     
-    Map <- Map %>% addPolygons(
+    Map %>% addPolygons(
       fillColor = ~pal(data_Map$temp),
       weight = 0.5,
       opacity = 1,
@@ -82,7 +88,7 @@ server <- function(input, output) {
         textsize = "15px",
         direction = "auto")
     )
-    Map
+    
   })
 }
 

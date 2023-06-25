@@ -71,7 +71,7 @@ server <- function(input, output) {
       "<strong>%s</strong><br/>%s: %g",
       data_Map$name, input$data, data_Map$temp) %>% lapply(htmltools::HTML)
     
-    Map <- Map %>% addPolygons(
+    Map %>% addPolygons(
       fillColor = ~pal(data_Map$temp),
       weight = 0.5,
       opacity = 1,
@@ -90,7 +90,6 @@ server <- function(input, output) {
         textsize = "15px",
         direction = "auto")
     )
-    Map
   })
 }
 

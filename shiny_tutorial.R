@@ -515,7 +515,7 @@ ui <- fluidPage(
   numericInput("count", label = "Number of values", value = 100),
 )
 
-server <- function(input, output, session) {
+server <- function(input, output) {
   input$count <- 10  # this will not work since the input argument is read-only
 }
 
@@ -530,7 +530,7 @@ ui <- fluidPage(
   numericInput("count", label = "Number of values", value = 100),
 )
 
-server <- function(input, output, session) {
+server <- function(input, output) {
   print(input$count)  # this will not work since the input is accessed outside of a reactive context
 }
 
@@ -543,12 +543,15 @@ shinyApp(ui, server)
 ui <- fluidPage(
   numericInput("count", label = "Number of values", value = 100),
   verbatimTextOutput("reactive"),
+  verbatimTextOutput("reactive2"),
   verbatimTextOutput("direct")
 )
 
-server <- function(input, output, session) {
-  reactiveValue <- reactive(input$count)
-  output$reactive <- renderPrint(reactiveValue())
+server <- function(input, output) {
+  count_log2 <- reactive(log2(input$count))
+  output$reactive <- renderPrint(count_log2())
+  output$reactive2 <- renderPrint(count_log2)
+  
   output$direct <- renderPrint(input$count)
 }
 
@@ -563,7 +566,7 @@ ui <- fluidPage(
   plotOutput("hist")
 )
 
-server <- function(input, output, session) {
+server <- function(input, output) {
   #inputValue <- reactive(input$count)
   output$hist <- renderPlot(hist(rnorm(input$count)))
 }
@@ -575,16 +578,15 @@ shinyApp(ui, server)
 ### Example 21: Reactive Content ###
 
 ui <- fluidPage(
-  sidebarPanel(
-    sidebarLayout(
-      numericInput("count", label = "Number of values", value = 100),
-      submitButton("I understand reactive!"),  
-    ),
-    mainPanel(plotOutput("hist"))
-  )
+  textInput("user_text", label = "Enter some text:", placeholder = "Please enter some text."),
+  textOutput("text"),
+  numericInput("count", label = "Number of values:", value = 100),
+  submitButton("Update all input"),  
+  plotOutput("hist")
 )
 
-server <- function(input, output, session) {
+server <- function(input, output) {
+  output$text <- renderText(input$user_text)
   output$hist <- renderPlot(hist(rnorm(input$count)))
 }
 
@@ -592,22 +594,46 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Backup ###
+### Example 21: Reactive Content ###
 
-## Only run examples in interactive R sessions
-if (interactive()) {
+ui <- fluidPage(
+  textInput("user_text", label = "Enter some text:", placeholder = "Please enter some text."),
+  textOutput("text"),
+  numericInput("count", label = "Number of values:", value = 100),
+  actionButton("submit", label = "Update only text input"),
+  plotOutput("hist")
+)
+
+server <- function(input, output) {
+  # reactive expression
+  text_reactive <- eventReactive( input$submit, {
+    input$user_text
+  })
   
-  ui <- fluidPage(
-    uiOutput("moreControls")
-  )
-  
-  server <- function(input, output) {
-    output$moreControls <- renderUI({
-      tagList(
-        sliderInput("n", "N", 1, 1000, 500),
-        textInput("label", "Label")
-      )
-    })
-  }
-  shinyApp(ui, server)
+  # text output
+  output$text <- renderText(text_reactive())
+  output$hist <- renderPlot(hist(rnorm(input$count)))
 }
+shinyApp(ui, server)
+
+
+#### Exercise 3 ####------------------------------------------------------------
+# Let's create some output for the diamond dataset from exercise 1:
+
+# first filter the data according to the carat range and the cut type. Use a reactive context 
+# bind the filtered data to the action button using eventReactive
+# display the data in a data table. Set page length to 5
+
+ui <- fluidPage(
+  sliderInput("carat_range", "Please select the carat range", min=0.2, max=5.2, 
+              value =c(0.2,2),step = 0.2),
+  selectInput("cut_type", "Please select the cut type",cut,selected="Fair"),
+  actionButton(inputId = "display", label = "Display!", class = "btn-success"),
+  dataTableOutput("diamond_filtered")
+)
+
+server <- function(input, output) {
+  
+}
+
+shinyApp(ui, server)

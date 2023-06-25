@@ -638,22 +638,39 @@ shinyApp(ui, server)
 
 #_______________________________________________________________________________
 
-### Backup ###
+#### Exercise 3 ####------------------------------------------------------------
+# Let's create some output for the diamond dataset from exercise 1:
 
-## Only run examples in interactive R sessions
-if (interactive()) {
+# first filter the data according to the carat range and the cut type. Use a reactive context 
+# bind the filtered data to the action button using eventReactive
+# display the data in a data table. Set page length to 5
+
+cut<-c("Fair", "Good", "Very Good", "Premium", "Ideal")
+ui <- fluidPage(
   
-  ui <- fluidPage(
-    uiOutput("moreControls")
-  )
+  titlePanel("manipulate the dataset diamond"),
+  # solution
   
-  server <- function(input, output) {
-    output$moreControls <- renderUI({
-      tagList(
-        sliderInput("n", "N", 1, 1000, 500),
-        textInput("label", "Label")
-      )
+  sliderInput("carat_range", "Please select the carat range", min=0.2, max=5.2, 
+              value =c(0.2,2),step = 0.2),
+  
+  selectInput("cut_type", "Please select the cut type",cut,selected="Fair"),
+  
+  actionButton(inputId = "display", label = "Display!", class = "btn-success"),
+  
+  dataTableOutput("diamond_filtered"),
+  
+  # solution
+  
+)
+
+server <- function(input, output) {
+  filtered_data <- reactive({diamonds %>%
+      filter(carat >= input$carat_range[1] & carat <= input$carat_range[2] & cut==input$cut_type)
     })
-  }
-  shinyApp(ui, server)
+  
+  data <- eventReactive(input$display, {filtered_data()})
+  output$diamond_filtered <- renderDataTable(data(), options = list(pageLength = 5))
 }
+
+shinyApp(ui, server)
